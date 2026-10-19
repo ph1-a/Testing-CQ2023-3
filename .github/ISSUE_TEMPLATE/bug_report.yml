@@ -1,0 +1,116 @@
+name: Bug report (EShop)
+description: Report a defect found while testing EShop
+title: "[FR-XX] Short description of the bug"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search existing issues and the group bug list first to avoid duplicates.
+        Replace FR-XX in the title with the feature ID.
+  - type: dropdown
+    id: feature
+    attributes:
+      label: Feature
+      options:
+        - FR-01 Account registration
+        - FR-02 Login & lockout
+        - FR-03 Forgot / reset password
+        - FR-04 Profile management
+        - FR-05 Product listing & search
+        - FR-06 Product detail
+        - FR-07 Shopping cart
+        - FR-08 Checkout
+        - FR-09 Discount coupons
+        - FR-10 Order state machine
+        - FR-11 Order history
+        - FR-12 Access control
+        - FR-13 Dashboard
+        - FR-14 Category CRUD
+        - FR-15 Product CRUD
+        - FR-16 CSV import
+        - FR-17 Coupon CRUD
+        - FR-18 Order management (admin)
+        - FR-19 User management (admin)
+        - Mobile app
+    validations:
+      required: true
+  - type: input
+    id: testcase
+    attributes:
+      label: Test case ID
+      placeholder: "e.g. FR03-BVA-07"
+    validations:
+      required: true
+  - type: dropdown
+    id: technique
+    attributes:
+      label: Technique that found it
+      options:
+        - Domain testing
+        - Boundary value analysis
+        - Other / exploratory
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical
+        - Major
+        - Minor
+        - Trivial
+    validations:
+      required: true
+  - type: textarea
+    id: preconditions
+    attributes:
+      label: Preconditions
+      placeholder: "e.g. Logged in as test@eshop.com, cart empty"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: input
+    id: input-data
+    attributes:
+      label: Test data
+      placeholder: "e.g. OTP = 12345 (5 digits)"
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result (cite the spec)
+      placeholder: "Per README FR-03: OTP must be 6 digits..."
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot / evidence
+      description: Drag and drop images here.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "e.g. Windows 11, Chrome 141, eshop-sut commit abc1234"
+  - type: input
+    id: reporter
+    attributes:
+      label: Reporter student ID
+    validations:
+      required: true
