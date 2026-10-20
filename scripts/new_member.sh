@@ -1,92 +1,115 @@
 #!/usr/bin/env bash
-# Creates your personal HW02 folder with one subfolder per feature.
-# Usage: bash scripts/new_member.sh STUDENT_ID FR-03 FR-07 FR-12 [MOBILE]
-# Example: bash scripts/new_member.sh 22127001 FR-03 FR-07 FR-12
+# Creates your personal folder for one homework, with one subfolder per feature.
+# Usage:   bash scripts/new_member.sh HW_NAME STUDENT_ID FR-xx [FR-yy ...]
+# Example: bash scripts/new_member.sh HW02 22127001 FR-03 FR-07 FR-12
+# Safe to re-run: existing files are never overwritten, so you can add a feature later.
 
 set -e
-if [ $# -lt 2 ]; then
-  echo "Usage: bash scripts/new_member.sh STUDENT_ID FR-xx [FR-yy ...]"; exit 1
+if [ $# -lt 3 ]; then
+  echo "Usage: bash scripts/new_member.sh HW_NAME STUDENT_ID FR-xx [FR-yy ...]"; exit 1
 fi
 
-ID="$1"; shift
-mkdir -p "$ID"
+HW="$1"; ID="$2"; shift 2
+ROOT="$HW/$ID"
+mkdir -p "$ROOT" "$HW/bugs/screenshots"
+touch "$HW/bugs/screenshots/.gitkeep"
+
+# write FILE only if it doesn't exist yet (content comes from stdin)
+new() { if [ -e "$1" ]; then cat >/dev/null; echo "  skip (exists): $1"; else cat > "$1"; echo "  created: $1"; fi; }
+
+TC_HEAD='| TC ID | Objective | Precondition | Input data | Steps | Expected | Actual | Verdict |
+|---|---|---|---|---|---|---|---|'
+
+# Homework-level README (assignment table), created once by whoever runs first
+new "$HW/README.md" <<EOF
+# $HW
+
+## Feature assignment (no duplicates)
+| Student ID | Pool A | Pool B | Pool C | Pool D (mobile) |
+|---|---|---|---|---|
+| | | | | |
+EOF
 
 for FR in "$@"; do
-  D="$ID/$FR"
+  D="$ROOT/$FR"
   mkdir -p "$D/screenshots"
   touch "$D/screenshots/.gitkeep"
 
-  cat > "$D/01_spec_analysis.md" <<EOF
-# $FR – Step 1: Spec analysis
+  new "$D/${FR}_1_variables.md" <<EOF
+# $FR – Step 1: Identify input & output variables
 
-## Spec excerpt
-<!-- Paste the relevant requirement text from eshop-sut README / api_specification -->
+## Spec used
 
-## Input and output variables
-| Variable | Type | Source (UI / API) | Constraint from spec |
-|---|---|---|---|
+## Input variables
+| ID | Variable | Condition / constraint | Type | From spec or Assumption |
+|---|---|---|---|---|
+
+## Output variables
+| ID | Variable | Condition / constraint | Type | From spec or Assumption |
+|---|---|---|---|---|
 
 ## Ambiguities / questions about the spec
 EOF
 
-  cat > "$D/02_domain_testing.md" <<EOF
-# $FR – Step 2: Domain testing
+  new "$D/${FR}_2_equivalence_classes.md" <<EOF
+# $FR – Step 2: Equivalence classes
 
-## 2.1 Variables and their domains
-
-## 2.2 Partitions (valid / invalid equivalence classes)
-| ID | Variable | Partition | Valid? | Representative value |
+## Classes per variable
+| Class ID | Variable ID | Class | Valid / Invalid | Example value |
 |---|---|---|---|---|
 
-## 2.3 Combining partitions / domain analysis table
-
-## 2.4 Test cases
-| TC ID | Objective | Input | Steps | Expected | Actual | Verdict |
-|---|---|---|---|---|---|---|
-
-## 2.5 What I changed from the AI output
+## Changes from the AI output
 EOF
 
-  cat > "$D/03_bva.md" <<EOF
-# $FR – Step 3: Boundary value analysis
+  new "$D/${FR}_3_test_cases.md" <<EOF
+# $FR – Step 3: Test cases (best representative of each class)
 
-## 3.1 Boundaries identified
-| Variable | Boundary | Below (off) | On | Above (off) |
+$TC_HEAD
+
+## Class coverage
+| Class ID | Covered by TC |
+|---|---|
+
+## Changes from the AI output
+EOF
+
+  new "$D/${FR}_4_bva.md" <<EOF
+# $FR – Step 4: Boundary value analysis
+
+## Boundaries
+| Variable ID | Boundary | Below | On | Above |
 |---|---|---|---|---|
 
-## 3.2 Test cases
-| TC ID | Objective | Input | Steps | Expected | Actual | Verdict |
-|---|---|---|---|---|---|---|
+## Test cases
+$TC_HEAD
 
-## 3.3 What I changed from the AI output
+## Changes from the AI output
 EOF
 
-  cat > "$D/04_execution.md" <<EOF
-# $FR – Step 4: Execution results
+  new "$D/${FR}_5_execution.md" <<EOF
+# $FR – Step 5: Execution results
 
-| TC ID | Executed on (date) | Actual | Verdict | Bug / Issue link |
+| TC ID | Date executed | Actual | Verdict | Issue link |
 |---|---|---|---|---|
 
 ## Summary
-- Designed:
-- Executed:
-- Passed:
-- Failed:
-- Not executed:
+| Designed | Executed | Passed | Failed | Not executed |
+|---|---|---|---|---|
+| | | | | |
 EOF
 
-  cat > "$D/05_ai_gap_analysis.md" <<EOF
-# $FR – Step 5: AI gap analysis
+  new "$D/${FR}_6_ai_gap_analysis.md" <<EOF
+# $FR – Step 6: AI gap analysis
 
-| What the AI missed | Found how | Why the AI missed it (prompt / tool limit / feature complexity) |
+| What the AI missed | How I found it | Why the AI missed it (prompt / tool limit / feature complexity) |
 |---|---|---|
 EOF
 done
 
-cat > "$ID/prompt_log.md" <<EOF
-# Prompt log – $ID
+new "$ROOT/prompt_log.md" <<EOF
+# Prompt log – $ID – $HW
 
-<!-- One entry per AI interaction. Never paraphrase prompts or outputs. -->
+<!-- One entry per AI interaction. Copy prompts and outputs exactly; never paraphrase. -->
 
 ## Entry 1
 - **Tool:**
@@ -100,15 +123,15 @@ cat > "$ID/prompt_log.md" <<EOF
 \`\`\`
 EOF
 
-cat > "$ID/ai_critique.md" <<EOF
-# AI Critique – $ID (200–300 words)
+new "$ROOT/ai_critique.md" <<EOF
+# AI Critique – $ID – $HW (200–300 words)
 
 <!-- Where was the AI wrong, biased or incomplete? Why did it miss it?
      What principle did you learn about working with AI? -->
 EOF
 
-cat > "$ID/README.md" <<EOF
-# HW02 – Domain Testing – $ID
+new "$ROOT/README.md" <<EOF
+# $HW – $ID
 
 ## Self-assessment
 | No. | Criteria | Grade | Self-assessed |
@@ -138,5 +161,6 @@ cat > "$ID/README.md" <<EOF
 -
 EOF
 
-echo "Created $ID/ with: $*"
-echo "Next: git add $ID && git commit -m \"$ID: set up HW02 folder\" && git push"
+echo
+echo "Done. Next:"
+echo "  git add $HW && git commit -m \"$HW: set up $ID folder\" && git push"
