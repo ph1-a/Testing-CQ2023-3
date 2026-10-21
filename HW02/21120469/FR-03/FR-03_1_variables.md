@@ -1,7 +1,7 @@
 # FR-03 – Step 1: Identify input & output variables
 
 ## Spec used
-Source: `eshop-sut/README.md` (FR-03, FR-01, SEC-07) and `api_specification.md` (1.3, 1.4). Black-box: spec documents only, no source code.
+Source: `eshop-sut/README.md` (FR-03, FR-01, SEC-07; FR-21 and FR-22 added after review) and `api_specification.md` (1.3, 1.4). Black-box: spec documents only, no source code.
 
 > **FR-03: Forgot password & reset (2 steps)**
 >
@@ -12,6 +12,10 @@ Source: `eshop-sut/README.md` (FR-03, FR-01, SEC-07) and `api_specification.md` 
 > **FR-01 (password rule):** min 8 characters, at least 1 uppercase, 1 lowercase, 1 digit, 1 special character from `@ $ ! % * ? &`.
 >
 > **SEC-07:** OTP must have enough entropy (min 6 digits), must expire, and must be invalidated after use.
+>
+> **FR-21 (general UI):** whole UI in Vietnamese; positive action buttons (Submit) are blue, destructive/cancel buttons red; exactly one `<h1>` per page; Tab focus order top-to-bottom, left-to-right.
+>
+> **FR-22 (forms):** every required field has a `*` next to its label; email fields use `type="email"`; password fields use `type="password"` (masked); error messages appear **above** the submit button; forms with 2+ steps have a clear step indicator.
 
 ## Input variables
 
@@ -48,6 +52,16 @@ Source: `eshop-sut/README.md` (FR-03, FR-01, SEC-07) and `api_specification.md` 
 | FR-03_OUT_13 | Redirect to login after successful reset | Set: {redirected, not redirected} | Set | Assumption (mirrors FR-01) |
 | FR-03_OUT_14 | Redirect to login via "Back to login" | Triggered by IN_02 = clicked | Set | Spec |
 | FR-03_OUT_15 | Account password after attempt | Set: {changed to new password (old rejected at login), unchanged} | Set | Assumption |
+| FR-03_OUT_16 | Required-field marker | A `*` next to the label of every required field (email; OTP, new password, confirm) | Set | Spec (FR-22) |
+| FR-03_OUT_17 | Email input type | `type="email"` | Set | Spec (FR-22) |
+| FR-03_OUT_18 | Password inputs type | New password and confirm use `type="password"` (masked) | Set | Spec (FR-22) |
+| FR-03_OUT_19 | Error message position | Shown above the submit button | Set | Spec (FR-22) |
+| FR-03_OUT_20 | Page heading | Exactly one `<h1>` on each step | Number | Spec (FR-21) |
+| FR-03_OUT_21 | Interface language | All labels, buttons and messages in Vietnamese | Set | Spec (FR-21) |
+| FR-03_OUT_22 | Submit button colour | Blue | Set | Spec (FR-21) |
+| FR-03_OUT_23 | Tab focus order | Top to bottom, left to right | Set | Spec (FR-21) |
+
+OUT_16–OUT_23 were **added after review**: FR-21 and FR-22 apply to every form but are not referenced from FR-03, so they were missed in the first version of this step (see the AI gap analysis). FR-22's step-indicator rule was already covered by OUT_01.
 
 ## Ambiguities / questions about the spec
 1. OTP expiry time T is not specified (SEC-07 only says "must expire").

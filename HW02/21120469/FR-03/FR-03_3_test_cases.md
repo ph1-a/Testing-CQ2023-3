@@ -96,6 +96,14 @@ Precondition for all: P1 + P2. Get OTP X for `test@eshop.com` via `POST /api/for
 | FR-03_TC_41 | Confirm field absent | EC_59 (TBD) | `{"email":"test@eshop.com","resetToken":"X","newPassword":"NewPass1!"}` (exactly API spec 1.4) | **Decided at execution.** Record what happens; the spec conflict is reported either way. |
 | FR-03_TC_42 | Reset for an email that never requested an OTP | EC_61 | Do **not** request an OTP for user B. `{"email":"userb@eshop.com","resetToken":"123456","newPassword":"NewPass1!"}` | Error; user B's password unchanged. |
 
+## GUI test cases – FR-21 / FR-22 (added after review)
+These check how each step looks and behaves, not its input domains. Each covers the GUI output classes on one page.
+
+| TC ID | Test case name | Classes covered | Precondition | Test steps (with data) | Expected result |
+|---|---|---|---|---|---|
+| FR-03_TC_43 | Step 1 page meets the form and UI rules | Outputs EC_79, 80, 82, 83, 84, 85, 86 | P1 | 1. Open the forgot-password page.<br>2. Inspect the email field (right-click → Inspect).<br>3. Count `<h1>` elements (DevTools: `document.querySelectorAll('h1').length`).<br>4. Press Tab repeatedly from the top of the page.<br>5. Submit with the email empty. | 1. All text in Vietnamese; submit button blue; `*` next to the email label.<br>2. `type="email"`.<br>3. Exactly 1.<br>4. Focus moves top to bottom, left to right.<br>5. Error message appears **above** the submit button, in Vietnamese. |
+| FR-03_TC_44 | Step 2 page meets the form and UI rules | Outputs EC_79, 81, 82, 83, 84, 85, 86 | P3 | 1. On step 2, check labels and button.<br>2. Type in the new password and confirm fields; inspect them.<br>3. Count `<h1>` elements.<br>4. Press Tab repeatedly from the top.<br>5. Submit with OTP X, new password `abc` and confirm `abc`. | 1. Vietnamese text; blue submit button; `*` next to OTP, new password and confirm labels.<br>2. Characters masked; both `type="password"`.<br>3. Exactly 1.<br>4. Focus order top to bottom, left to right.<br>5. Error appears **above** the submit button, in Vietnamese. |
+
 ## Coverage check
 
 Every class from step 2 is covered by at least one test case, and each invalid test case targets exactly one invalid input class.
@@ -128,6 +136,14 @@ Every class from step 2 is covered by at least one test case, and each invalid t
 | EC_24 | TC_01 | | EC_50 | TC_01 | | EC_76 | TC_02 |
 | EC_25 | TC_24 | | EC_51 | TC_37 | | EC_77 | TC_01 |
 | EC_26 | TC_01 | | EC_52 | TC_38 | | EC_78 | TC_19 |
+| | | | | | | EC_79 | TC_43, TC_44 |
+| | | | | | | EC_80 | TC_43 |
+| | | | | | | EC_81 | TC_44 |
+| | | | | | | EC_82 | TC_43, TC_44 |
+| | | | | | | EC_83 | TC_43, TC_44 |
+| | | | | | | EC_84 | TC_43, TC_44 |
+| | | | | | | EC_85 | TC_43, TC_44 |
+| | | | | | | EC_86 | TC_43, TC_44 |
 
 ## Summary
 
@@ -136,8 +152,9 @@ Every class from step 2 is covered by at least one test case, and each invalid t
 | Valid test cases | 7 |
 | Invalid test cases | 34 |
 | Test case with expected result decided at execution | 1 (TC_41) |
-| **Total test cases** | **42** |
-| Classes covered | 78 / 78 |
+| GUI test cases (FR-21/FR-22, added after review) | 2 |
+| **Total test cases** | **44** |
+| Classes covered | 86 / 86 |
 
 ## Notes for review
 1. **TC_01 carries 19 valid input classes.** That is what the lecture asks for, but if it fails, the cause is unclear. If TC_01 fails at execution, split it before reporting the bug.

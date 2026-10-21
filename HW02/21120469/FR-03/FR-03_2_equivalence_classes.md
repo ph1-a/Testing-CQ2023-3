@@ -161,6 +161,16 @@ As in the lecture's SUM / Error example, each distinct output is one class. "Tri
 | FR-03_EC_76 | OUT_14 Redirect via "Back to login" | Redirected to login | EC_11, EC_12 | Spec |
 | FR-03_EC_77 | OUT_15 Account password | Changed: new password logs in, old one is rejected | Same as EC_74 | Assumption |
 | FR-03_EC_78 | OUT_15 Account password | Unchanged: old password still logs in | Any invalid step 2 class | Assumption |
+| FR-03_EC_79 | OUT_16 Required-field marker | `*` next to every required field label | Page shown (both steps) | Spec (FR-22) |
+| FR-03_EC_80 | OUT_17 Email input type | `type="email"` | Step 1 shown | Spec (FR-22) |
+| FR-03_EC_81 | OUT_18 Password inputs type | `type="password"`, input masked | Step 2 shown | Spec (FR-22) |
+| FR-03_EC_82 | OUT_19 Error position | Error shown above the submit button | Any error output (EC_65–EC_73) | Spec (FR-22) |
+| FR-03_EC_83 | OUT_20 Page heading | Exactly one `<h1>` | Each step shown | Spec (FR-21) |
+| FR-03_EC_84 | OUT_21 Language | All text in Vietnamese | Each step shown, including messages | Spec (FR-21) |
+| FR-03_EC_85 | OUT_22 Submit button colour | Blue | Each step shown | Spec (FR-21) |
+| FR-03_EC_86 | OUT_23 Tab order | Top to bottom, left to right | Each step shown | Spec (FR-21) |
+
+EC_79–EC_86 were added after review, together with OUT_16–OUT_23 in step 1.
 
 ## Summary
 
@@ -169,8 +179,8 @@ As in the lecture's SUM / Error example, each distinct output is one class. "Tri
 | Valid input classes | 26 |
 | Invalid input classes | 34 |
 | TBD input classes (decided at execution) | 1 |
-| Output classes | 17 |
-| **Total** | **78** |
+| Output classes | 25 |
+| **Total** | **86** |
 
 ## Decision log (spec silent, decided by the tester)
 Bugs raised from these classes must say they rest on a tester decision, not on the spec.

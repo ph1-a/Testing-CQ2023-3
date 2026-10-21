@@ -132,7 +132,7 @@ Precondition for all except BVA_03: P3 from step 3 (on step 2 with OTP X for `te
 | Points already hit by step 3 test cases (reused) | 19 |
 | Points needing new test cases | 20 |
 | New BVA test cases (several points share one valid test case) | 13 |
-| **Total FR-03 test cases (step 3 + step 4)** | **42 + 13 = 55** |
+| **Total FR-03 test cases (step 3 + step 4)** | **44 + 13 = 57** |
 
 ## Notes for review
 1. **B4's upper bound (128) is a tester decision**, not spec. Bugs from BVA_06, BVA_07 or TC_26 must say so.
